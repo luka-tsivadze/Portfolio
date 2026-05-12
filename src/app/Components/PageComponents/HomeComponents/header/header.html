@@ -1,0 +1,78 @@
+<header class="hero section" id="hero">
+
+    <video
+    preload="auto"
+    autoplay
+    muted
+      #bgVideo
+    loop
+    class="hero__bg-video"
+    playsinline
+    [attr.aria-hidden]="true"
+
+  >
+    <source src="videos/coding_web3.mp4" type="video/mp4" />
+    <!-- optional: fallback image for very old browsers -->
+  </video>
+
+  <div class="hero__inner">
+    <div class="hero__content">
+      <p class="hero__eyebrow">
+      <app-textanimator [value]="headerData.heroinformation.miniskills" [delay]="100" ></app-textanimator> 
+      </p>
+
+      <h1 class="hero__title">
+      <app-textanimator [value]="headerData.heroinformation.name" [delay]="80"  [className]="`animateheads`" ></app-textanimator>
+      </h1>
+
+      <p class="hero__role">
+      <app-textanimator [value]="headerData.heroinformation.role" [delay]="60"  [className]="`animateheads`" ></app-textanimator>
+      </p>
+
+      <p class="hero__subtitle">
+        
+  <app-textanimator [value]="headerData.heroinformation.about" [delay]="10" ></app-textanimator>
+      </p>
+
+      <p class="hero__meta">
+        <span><app-textanimator [value]="headerData.heroinformation.location" [delay]="80"  [className]="`animateheads`" ></app-textanimator ></span>
+        <span aria-hidden="true">·</span>
+        <span><app-textanimator [value]="headerData.heroinformation.available" [delay]="80"  [className]="`animateheads`"  ></app-textanimator></span>
+      </p>
+
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="#projects">
+           {{headerData.heroinformation.btnprojeects}}
+        </a>
+
+        <a
+          class="btn btn--ghost"
+          [attr.href]="cvUrl"
+          download
+        >
+          {{headerData.heroinformation.btncv}}
+        </a>
+      </div>
+    </div>
+<div class="effects">
+  @for (win of headerData.codeWindows; track win.id) {
+    <div class="code" [ngClass]="[win.langClass, win.positionClass]">
+      <div class="head">
+        <img src="Icons/Home/gear.svg" style="filter: invert(1);" alt="gear icon " aria-hidden="true" />
+      <h3>
+        <app-textanimator [value]="win.label" [delay]="200" [className]="`animateheads`" ></app-textanimator>
+      </h3>
+       
+</div>
+    
+<div class="body">
+  <code>
+    <app-textanimator [value]="win.code" [delay]="20"></app-textanimator>
+  </code>
+</div>
+    </div>
+  }
+</div>
+
+  </div>
+</header>

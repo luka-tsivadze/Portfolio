@@ -1,0 +1,38 @@
+// responsive.scss
+
+$typography: (
+    h1: 2.5rem,
+    h2: 2rem,
+    h3: 1.75rem,
+    h4: 1.25rem,
+    p: 1rem,
+    a: 1rem,
+  
+);
+
+$responsive-breakpoints: (
+    tablet-large: (max: 1024px, scale: 0.92),
+    tablet:       (max: 768px,  scale: 0.85),
+    phone:        (max: 480px,  scale: 0.78)
+);
+
+// base sizes
+@each $sel, $size in $typography {
+    #{$sel} {
+        font-size: $size;
+    }
+}
+
+// responsive adjustments (progressively smaller)
+@each $bp-name, $bp-map in $responsive-breakpoints {
+    $max: map-get($bp-map, max);
+    $scale: map-get($bp-map, scale);
+
+    @media screen and (max-width: $max) {
+        @each $sel, $size in $typography {
+            #{$sel} {
+                font-size: $size * $scale;
+            }
+        }
+    }
+}

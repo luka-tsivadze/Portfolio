@@ -1,0 +1,71 @@
+<div class="proyects">
+  @for (project of projects; track project.Title; let i = $index) {
+    <div class="proyect-container fade-in-up" [style.--d]="i * 120 + 'ms'">
+
+      <div class="owl-carousel-o carousel-wrapper fade-in-left" [style.--d]="i * 150 + 'ms'"
+          >
+           
+        <div class="carousel-track"
+             [style.transform]="'translateX(-' + (currentIndex[i] * 100) + '%)'"
+             [style.transition]="'transform ' + transitionMs + 'ms ease'">
+
+          @for (img of project.imgs; track img) {
+            <div class="carousel-slide fade-in" style="--d: 150ms">
+              <div class="img-container">
+                <img [src]="img" [alt]="project.Title" />
+              </div>
+            </div>
+          }
+        </div>
+
+        <button class="carousel-btn prev" (click)="prev(i)">‹</button>
+        <button class="carousel-btn next" (click)="next(i)">›</button>
+
+        <div class="carousel-dots">
+          @for (img of project.imgs; track img; let dotIndex = $index) {
+            <button class="dot" [class.active]="currentIndex[i] === dotIndex"></button>
+          }
+        </div>
+      </div>
+
+      <div class="proyect-info-right fade-in-right" [style.--d]="i * 160 + 'ms'">
+        <div class="proyect-box">
+          <h4 class="feature-proyect">  <app-textanimator [className]="'animateheads'" [value]="'Highlighted Project'" [delay]="35"></app-textanimator></h4>
+          <h5 class="proyect-name"> <app-textanimator [className]="'animateheads'" [value]="project.Title" [delay]="35"></app-textanimator></h5>
+
+          <div class="proyect-description-box fade-in" style="--d: 300ms">
+            <p ><app-textanimator [value]="project.Description" [delay]="10" [fullDelay]="i*1100"></app-textanimator></p>
+          </div>
+
+          <ul class="proyect-skills">
+            @for (technology of project.Technologies; track technology; let x = $index) {
+              <li class="tech-anim" [style.--d]="x * 80 + 'ms'">
+                <span class="technology">{{ technology }}</span>
+              </li>
+            }
+          </ul>
+
+          <div class="proyect-links fade-in" style="--d: 400ms">
+
+            @if(project.demoLink){
+              <button (click)="openIframe(project.demoLink)">
+                Try It
+              </button>
+            }
+
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  }
+<div class="full-preview-overlay" [class.active]="iframeActive">
+  @if(iframeUrl){
+  <iframe  [src]="iframeUrl"></iframe>
+}
+  <button class="close-btn" (click)="closeIframe()">✕</button>
+</div>
+
+</div>
+

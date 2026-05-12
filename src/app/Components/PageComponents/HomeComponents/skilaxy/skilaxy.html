@@ -1,0 +1,63 @@
+<main class="skills">
+  <div class="border">
+  </div>
+  <header class="skills-table__header">
+    <h2>Skill overview</h2>
+    <p></p>
+  </header>
+
+  <section class="skill-system">
+    <div class="sun">
+      @if(suntitle.icon){
+        <img [src]="suntitle.icon" [alt]="suntitle.name">
+      }
+      <span class="sun__title"><app-textanimator [value]="suntitle.name"  [delay]="70" ></app-textanimator></span>
+   
+    </div>
+@for (planet of planets; track $index) {
+
+    <div
+      class="orbit"
+        
+      [ngClass]="planet.orbitClass"
+    >
+      <div
+        class="planet-wrapper"
+        [ngClass]="planet.wrapperClass"
+      >
+        <button
+          class="planet"
+          [ngClass]="'planet--' + planet.key"
+          (mouseenter)="setname(planet)"
+          (click)="openUrl(planet.url)"
+        >
+
+          <img [src]="planet.iconSrc || ''" [alt]="planet.name"  />
+        </button>
+
+        @if (planet.moons?.length) {
+
+          @for (moon of planet.moons; track $index) {
+          <div
+            class="moon-orbit"
+            [ngClass]="'moon-orbit--' + moon.key"
+            [style.animation-delay]="(5 * $index) + 's'"
+          >
+            <button
+              class="moon"
+              [ngClass]="'moon--' + moon.key"
+                    (mouseenter)="setname(moon)"
+                              (click)="openUrl(moon.url)"
+            >
+              <img [src]="moon.iconSrc || ''" [alt]="moon.name" />
+            </button>
+          </div>
+          }
+
+              }
+      </div>
+    </div>
+      
+}
+  </section>
+</main>

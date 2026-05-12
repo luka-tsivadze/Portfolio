@@ -1,0 +1,38 @@
+@let tokens = value | splitChars;
+
+
+<span class="text-wrapper" [class.animate-on]="animateOn">
+
+    
+    @for (token of tokens; track $index) {
+      
+      <!-- NEWLINE -->
+      @if (token.type === 'newline') {
+        <br />
+      }
+      
+      <!-- SPACE -->
+      @else if (token.type === 'space') {
+        <span class="space">&nbsp;</span>
+      }
+      
+      <!-- WORD -->
+      @else if (token.type === 'word') {
+        <span class="word">
+          @for (char of token.chars; track $index; let i = $index) {
+            <span
+            class="char"
+            [class]="animateOn ? className : ''"
+            [style.animationDelay.ms]="(token.startIndex + i) * delay"
+            
+            >
+            {{ char }}
+          </span>
+        }
+      </span>
+    }
+    
+  }
+
+
+</span>

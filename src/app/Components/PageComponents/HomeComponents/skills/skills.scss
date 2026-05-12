@@ -1,0 +1,135 @@
+.skills-table {
+  width: 100%;
+  max-width: 960px;
+  margin: 0rem auto 2rem;
+  padding: 1.5rem 1.25rem;
+
+
+}
+
+.skills-table__header {
+  margin-bottom: 1.25rem;
+
+  h2 {
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--text, #e6f8ff);
+    margin: 0 0 0.35rem;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.8rem;
+    opacity: 0.65;
+  }
+}
+
+.skills-table__wrapper {
+  overflow-x: auto;
+}
+
+.skills-table__grid {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  min-width: 620px;
+}
+
+.skills-table__grid thead {
+  text-align: left;
+
+  th {
+    padding: 0.6rem 0.75rem;
+    font-weight: 500;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(200, 240, 255, 0.72);
+    border-bottom: 1px solid rgba(0, 255, 255, 0.22);
+  }
+}
+
+.skills-table__row {
+  cursor: pointer;
+  transition:
+    background-color 160ms ease-out,
+    box-shadow 160ms ease-out,
+    transform 120ms ease-out;
+}
+
+.skills-table__row:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.01);
+}
+
+.skills-table__row:hover {
+  background-color: rgba(0, 255, 255, 0.05);
+  box-shadow: 0 0 18px rgba(0, 255, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+.skills-table__row--active {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 255, 255, 0.14),
+    rgba(138, 43, 226, 0.18)
+  );
+  box-shadow:
+    0 0 18px rgba(0, 255, 255, 0.35),
+    0 0 40px rgba(0, 0, 0, 1);
+}
+
+.skills-table__cell {
+  padding: 0.5rem 0.75rem;
+  white-space: nowrap;
+}
+
+.skills-table__cell--name {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.skills-table__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: radial-gradient(circle, #00ffff, #007a99);
+  box-shadow: 0 0 6px rgba(0, 255, 255, 0.9);
+}
+
+.skills-table__label {
+  font-weight: 500;
+}
+
+.skills-table__badge {
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  border: 1px solid rgba(0, 255, 255, 0.6);
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.skills-table__cell--used {
+  max-width: 260px;
+}
+
+.skills-table__used {
+  font-size: 0.76rem;
+}
+
+.skills-table__used--muted {
+  opacity: 0.4;
+}
+
+@media (max-width: 768px) {
+  .skills-table {
+    padding: 1.1rem 0.85rem;
+  }
+
+  .skills-table__grid {
+    min-width: 520px;
+  }
+}

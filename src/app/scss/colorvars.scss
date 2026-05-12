@@ -1,0 +1,37 @@
+
+
+
+// Base dark space
+$color-bg: #0a0d12;          // deep cosmic blue-black
+$color-bg-alt: #0f1219;       // slightly lighter for surfaces
+// Text
+$color-text: #e4f0ff;         // soft white with cool tint
+$color-text-dim: #a8b4c5;     // muted for secondary text
+// Neon accents
+$color-accent-blue: #3af2ff;  // neon cyan-blue
+$color-accent-green: #72ffb4; // neon green-teal
+// UI states
+$color-border: rgba(255, 255, 255, 0.08);
+$color-hover: rgba(58, 242, 255, 0.12);   // blue glow
+$color-active: rgba(114, 255, 180, 0.16); // green glow
+// Shadows / glow (use sparingly)
+$glow-blue: 0 0 12px rgba(58, 242, 255, 0.5);
+$glow-green: 0 0 12px rgba(114, 255, 180, 0.5);
+
+$background-gradient: linear-gradient(135deg, #0a0d12 0%, #1a1f26 100%);
+
+
+:root {
+  --background-gradient: #{$background-gradient};
+  --bg: #{$color-bg};
+  --bg-alt: #{$color-bg-alt};
+  --text: #{$color-text};
+  --text-dim: #{$color-text-dim};
+  --accent-blue: #{$color-accent-blue};
+  --accent-green: #{$color-accent-green};
+  --border: #{$color-border};
+  --hover: #{$color-hover};
+  --active: #{$color-active};
+  --glow-blue: #{$glow-blue};
+  --glow-green: #{$glow-green};
+}

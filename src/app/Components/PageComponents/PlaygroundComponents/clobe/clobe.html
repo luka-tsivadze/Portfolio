@@ -1,0 +1,14 @@
+
+<div class="globe">
+    @for (cube of cubes; track cube.id) {
+    <div class="cube" [style.transform]="cubeTransform(cube)" >
+      <div class="cube-inner">
+        @for (face of cube.sides; track face.face) {
+          <div class="{{ face.face }}">
+            <a >{{ face.text }}</a>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,122 @@
+main{
+  background: var(--background-gradient);
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+ 
+ z-index: -1;
+ .splash-wrapper{
+    width: 150px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+ }
+  .neoncircles{
+    position: absolute;
+    width: 200px;
+    height: 200px;
+
+            border-radius: 50%;
+
+  }
+  .dropout{
+      box-shadow: var(--glow-blue), var(--glow-green);
+
+        animation: pulse 1.7s infinite;
+  }
+  .dropin{
+        transform: scale(10.1);
+        
+        box-shadow: none;
+        animation: pulseReverse 1.5s infinite ;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    border-radius: 50%;
+    transform: scale(1);
+  
+  }
+  50% {
+      box-shadow: 0 0 20px rgba(58, 242, 255, 0.7), 0 0 20px rgba(114, 255, 180, 0.7);
+
+  } 
+  60%{
+    border-radius: 50%;
+  }
+  100% {
+    transform: scale(10.1);
+    border-radius: 0px;
+  }
+}
+@keyframes pulseReverse {
+  0% {
+
+    transform: scale(10.1);
+  
+  }
+  50% {
+    box-shadow:
+  0 0 32px rgba(38, 224, 255, 0.95),
+  0 0 48px rgba(38, 224, 255, 0.6),
+  0 0 24px rgba(69, 245, 230, 0.7);
+
+
+  } 
+  80%{
+  
+  }
+  100% {
+    transform: scale(1);
+    border-radius: 50%;
+  }
+}
+/* When leaving, Angular adds this class */
+.loader-circle-out {
+  /* circular mask shrinking to center */
+  animation: loaderCircleOut 000ms ease-out forwards;
+}
+
+/* kill the normal looping pulse while we do exit */
+.loader-circle-out .neoncircles {
+  animation: none !important;
+}
+
+/* optionally, give circles their own short collapse too */
+.loader-circle-out .neoncircles {
+  animation: circleCollapse 600ms ease-out forwards;
+}
+
+/* mask: outside -> center */
+@keyframes loaderCircleOut {
+  from {
+    clip-path: circle(140% at 50% 50%); /* full screen */
+    opacity: 1;
+  }
+  to {
+    clip-path: circle(0% at 50% 50%);   /* tiny dot in center */
+    opacity: 0;
+  }
+}
+
+/* optional: inner circles shrinking with it */
+@keyframes circleCollapse {
+  from {
+    transform: scale(1);
+    border-radius: 50%;
+    box-shadow: inherit;
+  }
+  to {
+    transform: scale(0);
+    border-radius: 50%;
+    box-shadow: none;
+  }
+}

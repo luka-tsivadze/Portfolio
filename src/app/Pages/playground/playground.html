@@ -1,0 +1,24 @@
+<main>
+    <h1>Playground</h1>
+    <p>Welcome to the playground! Here you can experiment with different components and features. and even create your own!</p>
+
+<div class="component-container">
+    <span>
+        <app-clobe></app-clobe>
+    </span>
+    
+    
+    @for (inputCode of allCode$ | async; track $index) {
+
+        <span >
+            <app-user-upload [code]="inputCode"></app-user-upload>
+            
+        </span>
+    }
+
+
+    
+</div>
+<app-code-uploader (codeUploaded)="uploadCode($event)"></app-code-uploader>
+
+</main>

@@ -1,0 +1,53 @@
+<section class="skills-table">
+  
+
+  <div class="skills-table__wrapper">
+    <table class="skills-table__grid">
+      <thead>
+        <tr>
+          <th>Skill</th>
+          <th>Category</th>
+          <th>Level</th>
+          <th>Used in</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (row of rows; track row.key) {
+          <tr
+            class="skills-table__row"
+            [class.skills-table__row--active]="row.key === selectedKey"
+            (click)="onRowClick(row)"
+          >
+            <td class="skills-table__cell skills-table__cell--name">
+              <span class="skills-table__dot"></span>
+              <span class="skills-table__label">{{ row.name }}</span>
+            </td>
+
+            <td class="skills-table__cell">
+              {{ row.category }}
+            </td>
+
+            <td class="skills-table__cell">
+              <span class="skills-table__badge">
+                {{ row.level }}
+              </span>
+            </td>
+
+            <td class="skills-table__cell skills-table__cell--used">
+              @if (row.usedIn?.length) {
+                <span class="skills-table__used"
+                      >{{ row.usedIn.join(', ') }}</span
+                >
+              } @else {
+                <span class="skills-table__used skills-table__used--muted">
+                  —
+                </span>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

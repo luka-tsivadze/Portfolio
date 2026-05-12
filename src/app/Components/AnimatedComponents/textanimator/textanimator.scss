@@ -1,0 +1,19 @@
+.text-wrapper {
+  display: inline;
+}
+
+.word {
+  display: inline-block;
+  white-space: nowrap; // prevent word from breaking
+}
+
+.word > span {
+  display: inline-block;
+}
+
+.space {
+  display: inline-block;
+}
+.text-wrapper:not(.animate-on) {
+  opacity: 0;
+}

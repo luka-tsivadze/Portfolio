@@ -1,0 +1,151 @@
+<div class="uploader">
+  <div class="card" [class.flash]="isFlashing">
+
+    <div class="card-header">
+      <div class="header-icon">
+        <svg viewBox="0 0 18 18" fill="none">
+          <path d="M5 7L2 9L5 11" stroke="#5ee8da" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M13 7L16 9L13 11" stroke="#5ee8da" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M10.5 3.5L7.5 14.5" stroke="#5ee8da" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="header-text">
+        <h2>Component Upload</h2>
+        <p>Upload your components by pasting your HTML, CSS, and JavaScript. or paste your angular component directly or you can even paste angular code </p>
+      </div>
+    </div>
+
+    <div class="tabs">
+      @for (tab of tabs; track tab.key) {
+        <button
+          class="tab-btn"
+          [class.active]="activeTab === tab.key"
+          [class.has-error]="fieldErrors[tab.key]"
+          [class.has-warn]="tab.key === 'js' && jsWarning"
+          (click)="setTab(tab.key)">
+          <span class="tab-dot" [ngClass]="'dot-' + tab.key"></span>
+          {{ tab.label }}
+        </button>
+      }
+              <button
+                 [class.active]="activeMode === 'angular-cli'"
+          class="tab-btn Angular"
+          (click)="setMode('angular-cli')"
+          >
+          <span class="tab-dot" ></span>
+           Angular
+        </button>
+    </div>
+
+    <form (ngSubmit)="onUploadCode()">
+      <div class="editors">
+
+        @if (activeTab === 'html') {
+          <div class="editor-pane">
+            <div class="editor-wrap">
+              <div class="line-nums">
+                @for (n of getLineNumbers('html'); track n) {
+                  <div class="line-num">{{ n }}</div>
+                }
+              </div>
+              <textarea
+                class="code-input"
+                [class.input-error]="fieldErrors['html']"
+                [(ngModel)]="code.html"
+                name="html"
+                placeholder="<!-- your markup here -->"
+                spellcheck="false"
+                (ngModelChange)="onInputChange('html')">
+              </textarea>
+            </div>
+            @if (fieldErrors['html']) {
+              <div class="field-msg error">
+                <span class="field-msg-icon">✕</span>
+                <span>{{tabs[0].label}} is required — your component needs markup to render</span>
+              </div>
+            }
+          </div>
+        }
+
+        @if (activeTab === 'css') {
+          <div class="editor-pane">
+            <div class="editor-wrap">
+              <div class="line-nums">
+                @for (n of getLineNumbers('css'); track n) {
+                  <div class="line-num">{{ n }}</div>
+                }
+              </div>
+              <textarea
+                class="code-input"
+                [class.input-error]="fieldErrors['css']"
+                [(ngModel)]="code.css"
+                name="css"
+                placeholder="/* your styles here */"
+                spellcheck="false"
+                (ngModelChange)="onInputChange('css')">
+              </textarea>
+            </div>
+            @if (fieldErrors['css']) {
+              <div class="field-msg error">
+                <span class="field-msg-icon">✕</span>
+                <span>{{tabs[1].label}} is required — add at least some basic styles</span>
+              </div>
+            }
+          </div>
+        }
+
+        @if (activeTab === 'js') {
+          <div class="editor-pane">
+            <div class="editor-wrap">
+              <div class="line-nums">
+                @for (n of getLineNumbers('js'); track n) {
+                  <div class="line-num">{{ n }}</div>
+                }
+              </div>
+              <textarea
+                class="code-input"
+                [class.input-warn]="jsWarning"
+                [(ngModel)]="code.js"
+                name="js"
+                placeholder="// your script here"
+                spellcheck="false"
+                (ngModelChange)="onInputChange('js')">
+              </textarea>
+            </div>
+            @if (jsWarning) {
+              <div class="field-msg warn">
+                <span class="field-msg-icon">⚠</span>
+                <span>No {{tabs[2].label}} detected — component will be static only</span>
+              </div>
+            }
+          </div>
+        }
+
+      </div>
+
+      @if (bannerMessage) {
+        <div class="validation-banner" [class.error]="bannerType === 'error'" [class.warn]="bannerType === 'warn'">
+          <span class="banner-icon">{{ bannerType === 'error' ? '✕' : '⚠' }}</span>
+          <span>{{ bannerMessage }}</span>
+          <span class="banner-close" (click)="dismissBanner()">✕</span>
+        </div>
+      }
+
+      <div class="form-footer">
+        <span class="char-count">{{ charCount }} chars</span>
+        <div class="btn-group">
+          <button type="button" class="btn-clear" (click)="clearActive()">CLEAR</button>
+  <button type="submit" class="btn-submit" [disabled]="isCompiling">
+  {{ isCompiling ? 'COMPILING...' : 'DEPLOY ›' }}
+</button>
+        </div>
+      </div>
+    </form>
+
+    <div class="status-bar">
+      <div class="status-dot"></div>
+      <span class="status-text">{{ statusText }}</span>
+    </div>
+
+  </div>
+</div>

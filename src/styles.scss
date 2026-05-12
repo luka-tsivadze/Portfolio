@@ -1,1 +1,56 @@
 /* You can add global styles to this file, and also import other style files */
+
+@use 'app/scss/colorvars.scss' as *;
+@use 'app/scss/mixins.scss' as *;
+@use 'app/scss/responsive.scss' as *;
+@use 'app/scss/animations.scss' as *;
+
+body{
+    background-color: var(--bg-alt);
+    color: var(--text);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  }
+  *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: firago;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+  background: #05060a;
+}
+
+/* track */
+::-webkit-scrollbar-track {
+  background: #05060a;
+
+}
+
+/* thumb */
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 17, 255, 0.164),
+    rgba(0, 255, 221, 0.493)
+  );
+  border-radius: 6px;
+  box-shadow:
+    0 0 6px rgba(0, 200, 255, 0.35),
+    0 0 12px rgba(0, 255, 220, 0.2);
+  border: 1px solid #05060a;
+}
+
+/* hover */
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 230, 255, 0.55),
+    rgba(0, 255, 220, 0.45)
+  );
+  box-shadow:
+    0 0 8px rgba(0, 230, 255, 0.5),
+    0 0 16px rgba(0, 255, 220, 0.35);
+}

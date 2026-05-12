@@ -1,0 +1,65 @@
+
+button{
+    position: absolute;
+    right: 20px;
+}
+
+.globe {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  margin-left: auto;
+  perspective: 900px;
+  transform-style: preserve-3d;
+  animation: spinGlobe 26s linear infinite;
+  will-change: transform;
+}
+
+@keyframes spinGlobe {
+  0%   { transform: rotateX(-12deg) rotateY(0deg); }
+  100% { transform: rotateX(-12deg) rotateY(360deg); }
+}
+
+
+.cube {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 42px;
+  height: 42px;
+  transform-style: preserve-3d;
+}
+
+.cube-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+/* cube faces */
+.cube-inner {
+  .front, .back, .left, .right, .top, .bottom {
+    position: absolute;
+    width: 95%;
+    height: 95%;
+    background: rgba(58, 242, 255, 0.08);
+    border: 1px solid rgba(58, 242, 255, 0.35);
+    backdrop-filter: blur(5px);
+
+    a {
+      color: var(--text, #e4f0ff);
+      text-decoration: none;
+      font-size: 0.7rem;
+      text-align: center;
+      padding: 0 0.25rem;
+    }
+  }
+
+  .front  { transform: translateZ(21px); }
+  .back   { transform: rotateY(180deg) translateZ(21px); }
+  .right  { transform: rotateY(90deg) translateZ(21px); }
+  .left   { transform: rotateY(-90deg) translateZ(21px); }
+  .top    { transform: rotateX(90deg) translateZ(21px); }
+  .bottom { transform: rotateX(-90deg) translateZ(21px); }
+}
