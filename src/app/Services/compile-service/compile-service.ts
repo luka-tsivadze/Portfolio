@@ -101,12 +101,11 @@ export class CompileService {
         .replace(/import\\s*\\{[^}]*\\}\\s*from\\s*['"][^'"]*['"]\\s*;?/g, '')
         .replace(/import\\s+[^;]+;/g, '');
 
-      console.log('step 2: imports stripped');
 
       await new Promise(function(res) {
         Sass.compile(rawScss, function(result) {
           css = result.text || '';
-          console.log('step 3: scss done, length:', css.length);
+
           res();
         });
       });
@@ -126,7 +125,6 @@ export class CompileService {
         .split('exports').join('window')
         .split('{ static: true }').join('{ static: false }');
 
-      console.log('step 4: ts compiled, length:', cleanJs.length);
 
       window.Component = function(metadata) {
         const patched = Object.assign({}, metadata, { template: rawHtml, styles: [css] });
@@ -185,12 +183,10 @@ export class CompileService {
       window.SlicePipe           = ngCommon.SlicePipe;
       window.PercentPipe         = ngCommon.PercentPipe;
 
-      console.log('step 5: globals exposed');
 
       eval(cleanJs);
 
       UserComponent = window.__userComponent;
-      console.log('step 6: eval done, component:', !!UserComponent);
 
       if (!UserComponent) {
         throw new Error('Component class not found after eval');
@@ -198,8 +194,7 @@ export class CompileService {
 
       const annotations = UserComponent.__annotations__;
       selector = annotations?.[0]?.selector || 'app-root';
-      console.log('step 7: selector:', selector);
-
+ 
       const rootEl = document.createElement(selector);
       document.body.appendChild(rootEl);
 
@@ -209,7 +204,6 @@ export class CompileService {
         bootstrap:    [UserComponent]
       })(class AppModule {});
 
-      console.log('step 8: bootstrapping...');
       const platformRef = await ngPBD.platformBrowserDynamic().bootstrapModule(AppModule, { ngZone: 'noop' });
       const appRef = platformRef.injector.get(ngCore.ApplicationRef);
    appRef.tick();
@@ -224,10 +218,10 @@ setTimeout(function() {
     try { compRef.instance.ngAfterViewInit(); } catch(e) {}
   }
 }, 200);
-      console.log('step 9: bootstrap done');
+ 
 
     } catch(e) {
-      console.error('COMPILE FAILED:', e.message, e.stack);
+
       window.parent.postMessage({
         type: 'COMPILE_ERROR',
         error: e.message + '\\n' + (e.stack || '')
@@ -305,7 +299,7 @@ setTimeout(function() {
         'appRef.tick();' +
    '["click","mousedown","mouseup","mousemove","input","change","keyup","keydown"].forEach(function(ev) {' +
     'document.addEventListener(ev, function() {' +
-      'console.log("event:", ev);' +  // ← add this temporarily
+      
       'appRef.tick();' +
     '});' +
   '});' +

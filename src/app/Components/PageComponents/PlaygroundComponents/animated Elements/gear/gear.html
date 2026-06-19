@@ -1,0 +1,38 @@
+
+
+<div class="gearholder">
+
+  <div class="gear" [style.--size.px]="size">
+    
+   
+    @for (t of teeth; track $index; let i = $index) {
+      <div
+      class="tooth"
+      
+      [style.transform]="toothTransform(i)"
+      ></div>
+    }
+ 
+    <div class="gear-body"></div>
+    
+ 
+    <div class="gear-hollow"></div>
+    
+  </div>
+    <div class="gear" [style.--size.px]="size">
+   
+    @for (t of teeth; track $index; let i = $index) {
+      <div
+      class="tooth"
+      
+      [style.transform]="toothTransform(i)"
+      ></div>
+    }
+  
+    <div class="gear-body"></div>
+
+    <div class="gear-hollow"></div>
+    
+  </div>
+  
+</div>

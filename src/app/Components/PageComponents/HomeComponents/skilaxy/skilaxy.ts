@@ -10,11 +10,11 @@ type MoonConfig = {
 };
 
 type PlanetConfig = {
-  key: string;   // 'angular', 'git', 'linux', ...
-  name: string;  // alt text
-  iconSrc?: string; // optional, you fill later
-  orbitClass: string; // e.g. 'orbit--angular'
-  wrapperClass: string; // e.g. 'planet-wrapper--angular'
+  key: string;   
+  name: string;  
+  iconSrc?: string; 
+  orbitClass: string; 
+  wrapperClass: string; 
   moons?: MoonConfig[];
   url: string;
 };
@@ -28,71 +28,8 @@ type PlanetConfig = {
 export class Skilaxy {
 
  planets: PlanetConfig[] = [
-  {
-    key: 'angular',
-    name: 'Angular',
-    url: 'https://v17.angular.io/guide/what-is-angular',
-    orbitClass: 'orbit--angular',
-    wrapperClass: 'planet-wrapper--angular',
-    iconSrc: 'Icons/Home/angular.svg',
-    moons: [
-      { 
-        key: 'ionic', 
-        name: 'Ionic', 
-        iconSrc:'Icons/Home/ionic.svg',
-        url: 'https://ionicframework.com/docs'
-      },
-      {  
-        key: 'rxjs', 
-        name: 'RxJS', 
-        iconSrc: 'Icons/Home/rxjs.svg',
-        url: 'https://rxjs.dev/guide/overview'
-      }
-    ]
-  },
-
-  {
-    key: 'github',
-    name: 'GitHub',
-    url: 'https://github.com/about',
-    orbitClass: 'orbit--git',
-    wrapperClass: 'planet-wrapper--git',
-    iconSrc:'Icons/Home/github.svg',
-    moons: [
-      { 
-        key: 'git', 
-        name:'Git', 
-        iconSrc: 'Icons/Home/git.svg',
-        url: 'https://git-scm.com/about'
-      }
-    ]
-  },
-
-  {
-    key: 'linux',
-    name: 'Linux',
-    url: 'https://www.linuxfoundation.org/',
-    orbitClass: 'orbit--linux',
-    wrapperClass: 'planet-wrapper--linux',
-    iconSrc: 'Icons/Home/linux.svg',
-    moons: [
-      { 
-        key: 'arch', 
-        name: 'Arch Linux',
-        iconSrc:'Icons/Home/arch.svg',
-        url: 'https://archlinux.org/'
-      }
-    ]
-  },
-
-  {
-    key: 'react',
-    name: 'React',
-    url: 'https://react.dev/learn',
-    orbitClass: 'orbit--react',
-    wrapperClass: 'planet-wrapper--react',
-    iconSrc: 'Icons/Home/react.svg'
-  },
+ 
+ 
 
   {
     key: 'html',
@@ -155,7 +92,75 @@ export class Skilaxy {
         url: 'https://jquery.com/'
       }
     ]
-  }
+  },
+   {
+    key: 'angular',
+    name: 'Angular',
+    url: 'https://v17.angular.io/guide/what-is-angular',
+    orbitClass: 'orbit--angular',
+    wrapperClass: 'planet-wrapper--angular',
+    iconSrc: 'Icons/Home/angular.svg',
+    moons: [
+      { 
+        key: 'ionic', 
+        name: 'Ionic', 
+        iconSrc:'Icons/Home/ionic.svg',
+        url: 'https://ionicframework.com/docs'
+      },
+      {  
+        key: 'rxjs', 
+        name: 'RxJS', 
+        iconSrc: 'Icons/Home/rxjs.svg',
+        url: 'https://rxjs.dev/guide/overview'
+      }
+    ]
+  },
+
+   {
+    key: 'linux',
+    name: 'Linux',
+    url: 'https://www.linuxfoundation.org/',
+    orbitClass: 'orbit--linux',
+    wrapperClass: 'planet-wrapper--linux',
+    iconSrc: 'Icons/Home/linux.svg',
+    moons: [
+      { 
+        key: 'arch', 
+        name: 'Arch Linux',
+        iconSrc:'Icons/Home/arch.svg',
+        url: 'https://archlinux.org/'
+      }
+    ]
+  },
+   {
+    key: 'github',
+    name: 'GitHub',
+    url: 'https://github.com/about',
+    orbitClass: 'orbit--git',
+    wrapperClass: 'planet-wrapper--git',
+    iconSrc:'Icons/Home/github.svg',
+    moons: [
+      { 
+        key: 'git', 
+        name:'Git', 
+        iconSrc: 'Icons/Home/git.svg',
+        url: 'https://git-scm.com/about'
+      }
+    ]
+  },
+
+
+
+ 
+
+  {
+    key: 'react',
+    name: 'React',
+    url: 'https://react.dev/learn',
+    orbitClass: 'orbit--react',
+    wrapperClass: 'planet-wrapper--react',
+    iconSrc: 'Icons/Home/react.svg'
+  },
 ];
 
   suntitle:{name:string , icon:string}={name:"core stack & tools", icon:''}

@@ -1,0 +1,48 @@
+$color:   #22d3ee;
+$page-bg: #0f172a;
+$tooth-w: 14px;
+$tooth-h: 38px;
+ 
+.gear {
+  position: absolute;
+  top:  50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width:  var(--size, 180px);
+
+  height: var(--size, 180px);
+}
+ 
+.tooth {
+  position: absolute;
+  top:  50%;
+  left: 50%;
+  width:  $tooth-w;
+  height: $tooth-h;
+  margin-top:  calc($tooth-h / -2);
+  margin-left: calc($tooth-w / -2);
+  background: #0f4952;
+  border-radius: 2px;
+  z-index: 3;
+  transform-origin: center center;
+}
+ 
+.gear-body {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: $color;
+  z-index: 1;
+}
+ 
+.gear-hollow {
+  position: absolute;
+  top:  50%;
+  left: 50%;
+  width:  calc(var(--size, 180px) * 0.82);
+  height: calc(var(--size, 180px) * 0.82);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: $page-bg;
+  z-index: 2;
+}

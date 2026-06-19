@@ -11,14 +11,17 @@ export const routes: Routes = [
 },
 {
     path: 'playground',
-    component: Playground
+  loadComponent: () =>
+    import('./Pages/playground/playground').then(m => m.Playground)
 },
 {
-    path: 'about',
-    component: About
+  path: 'about',
+  loadComponent: () =>
+    import('./Pages/about/about').then(m => m.About)
 },
 {
     path:'Projects',
-    component:Projects
+ loadComponent: () =>
+   import('./Pages/projects/projects').then(m => m.Projects)
 }
 ];
