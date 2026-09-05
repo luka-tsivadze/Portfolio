@@ -1,38 +1,32 @@
-
-
-<div class="gearholder">
-
-  <div class="gear" [style.--size.px]="size">
-    
-   
-    @for (t of teeth; track $index; let i = $index) {
-      <div
+<div
+  class="gear"
+  [style.width.px]="size"
+  [style.height.px]="size"
+  [style.left.%]="left"
+  [style.top.%]="top"
+  [style.animation-duration.s]="duration"
+  [style.animation-direction]="reverse ? 'reverse' : 'normal'"
+        [style.animation-delay.s]="delay"
+>
+  @for (t of teeth; track $index; let i = $index) {
+    <div
       class="tooth"
-      
-      [style.transform]="toothTransform(i)"
-      ></div>
-    }
- 
-    <div class="gear-body"></div>
-    
- 
-    <div class="gear-hollow"></div>
-    
-  </div>
-    <div class="gear" [style.--size.px]="size">
-   
-    @for (t of teeth; track $index; let i = $index) {
-      <div
-      class="tooth"
-      
-      [style.transform]="toothTransform(i)"
-      ></div>
-    }
-  
-    <div class="gear-body"></div>
+      [style.width.px]="toothW"
+      [style.height.px]="toothH"
+      [style.margin-top.px]="-toothH / 2"
+      [style.margin-left.px]="-toothW / 2"
+      [style.background]="toothColor"
 
-    <div class="gear-hollow"></div>
-    
-  </div>
-  
+      [style.transform]="toothTransform(i, teeth.length)"
+    ></div>
+  }
+
+  <div class="gear-body" [style.background]="color"></div>
+
+  <div
+    class="gear-hollow"
+    [style.width.px]="hollowSize"
+    [style.height.px]="hollowSize"
+    [style.background]="hollowColor"
+  ></div>
 </div>

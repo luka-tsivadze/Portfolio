@@ -1,1 +1,19 @@
-<p>about works!</p>
+
+<main>
+
+<app-about-header></app-about-header>
+  <div class="row">
+    <app-preview-home></app-preview-home>
+    <app-preview-projects></app-preview-projects>
+    <app-preview-skills class="component"></app-preview-skills>
+    <app-preview-playground class="component"></app-preview-playground>
+  </div>
+  
+  <app-app-about-decisions></app-app-about-decisions>
+  <div class="row">
+    <app-app-about-benefits heading="NO LIBRARIES" [items]="noLibrariesItems"></app-app-about-benefits>
+    <app-app-about-benefits heading="BUILT HERE" [items]="builtHereItems"></app-app-about-benefits>
+    <app-app-about-benefits heading="ARCHITECTURE" [items]="architectureItems"></app-app-about-benefits>
+  </div>
+
+  </main>

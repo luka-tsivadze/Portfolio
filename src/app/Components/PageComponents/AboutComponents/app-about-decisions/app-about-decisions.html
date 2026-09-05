@@ -1,0 +1,14 @@
+<div class="decisions">
+  <p class="sec-label">// TECHNICAL DECISIONS — AND WHY</p>
+
+  <div class="decision-item" *ngFor="let item of decisions">
+    <span class="d-tag" [ngClass]="'d-tag--' + item.tag.toLowerCase()">
+      {{ item.tag }}
+    </span>
+    <div class="d-content">
+      <p class="d-name">{{ item.name }}</p>
+      <p class="d-why">{{ item.why }}</p>
+      <p class="d-ref">{{ item.ref }}</p>
+    </div>
+  </div>
+</div>

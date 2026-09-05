@@ -1,0 +1,11 @@
+<div class="benefits-col">
+  <p class="phil-head">{{ heading }}</p>
+
+
+  @for (item of items; track $index) {
+
+    <p class="phil-line" >
+      {{ item.label }}
+    </p>
+  }
+</div>

@@ -1,0 +1,31 @@
+<section class="about-header">
+
+  <div class="intro">
+    <p class="eyebrow">// ABOUT THIS PLATFORM</p>
+    <h1 class="headline">
+      Years of work.<br>
+      <em>One place. No shortcuts.</em>
+    </h1>
+    <p class="body-text">
+      After years working with Angular in production and across hardware systems, this platform
+      exists to show what that accumulation actually looks like when every decision is made
+      intentionally — no UI libraries, no ready-made components, no outside connections except
+      a database. Every animation, every pipe, every 3D scene was written here.
+    </p>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-col" *ngFor="let entry of timeline">
+      <span class="tl-year">{{ entry.year }}</span>
+      <p class="tl-text">{{ entry.text }}</p>
+      <div class="tl-bar">
+        <div
+          class="tl-fill"
+          [style.width.%]="entry.fillPercent"
+          [class.tl-fill--accent]="entry.accent"
+        ></div>
+      </div>
+    </div>
+  </div>
+
+</section>

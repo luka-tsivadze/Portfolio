@@ -1,0 +1,70 @@
+.decisions {
+  padding: 22px 26px;
+}
+
+.sec-label {
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  color: rgba(160, 240, 208, 0.28);
+  margin-bottom: 16px;
+}
+
+.decision-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(0, 255, 160, 0.04);
+}
+
+.d-tag {
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  padding: 3px 7px;
+  border: 1px solid;
+  white-space: nowrap;
+  align-self: start;
+  margin-top: 1px;
+
+  &--custom {
+    border-color: rgba(29, 158, 117, 0.35);
+    color: #5dcaa5;
+    background: rgba(29, 158, 117, 0.06);
+  }
+
+  &--perf {
+    border-color: rgba(127, 119, 221, 0.35);
+    color: #afa9ec;
+    background: rgba(127, 119, 221, 0.06);
+  }
+
+  &--arch {
+    border-color: rgba(186, 117, 23, 0.35);
+    color: #ef9f27;
+    background: rgba(186, 117, 23, 0.06);
+  }
+}
+
+.d-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.d-name {
+  font-size: 10px;
+  color: #9fe1cb;
+}
+
+.d-why {
+  font-size: 9px;
+  color: rgba(160, 240, 208, 0.38);
+  line-height: 1.6;
+}
+
+.d-ref {
+  font-size: 8px;
+  color: rgba(160, 240, 208, 0.2);
+  font-style: italic;
+}

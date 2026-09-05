@@ -1,0 +1,31 @@
+.benefits-col {
+  padding: 0 20px;
+  border-right: 1px solid rgba(0, 255, 160, 0.06);
+
+  &:last-child {
+    border-right: none;
+  }
+
+  &:first-child {
+    padding-left: 0;
+  }
+}
+
+.phil-head {
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: rgba(160, 240, 208, 0.28);
+  margin-bottom: 10px;
+}
+
+.phil-line {
+  font-size: 12px;
+  color: rgba(160, 240, 208, 0.38);
+  line-height: 1.8;
+  padding: 4px 0;
+
+  &::before {
+    content: '— ';
+    color: rgba(29, 158, 117, 0.5);
+  }
+}

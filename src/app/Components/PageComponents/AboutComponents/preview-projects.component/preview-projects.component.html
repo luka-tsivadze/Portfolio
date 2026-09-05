@@ -1,0 +1,22 @@
+<div class="preview-card">
+  <div class="corner tl"></div>
+  <div class="corner br"></div>
+
+  <div class="preview-window">
+    <div class="proj-rows">
+      <div
+        class="proj-row"
+        *ngFor="let row of rows; let i = index"
+        [style.animation-delay]="(i * 0.18) + 's'"
+      >
+        <div class="proj-dot" [style.background]="row.color"></div>
+        <span class="proj-label">{{ row.label }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="preview-footer">
+    <span class="preview-name">PROJECTS</span>
+    <span class="badge badge--live">LIVE</span>
+  </div>
+</div>

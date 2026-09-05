@@ -7,12 +7,18 @@
         <app-clobe></app-clobe>
     </span>
      <span>
-        <app-gear></app-gear>
-    </span>
-    
+        <app-gear [color]="'#22d3ee'" [reverse]="true" [size]="400" [toothHeight]="40"[toothColor]="'linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(6,79,90,1) 35%, rgba(34,211,238,1) 100%)'"  [teethCount]="20" [left]="1" [top]="4"></app-gear>
+           <app-gear [color]="'#38bdf8'" [reverse]="false" [size]="300" [left]="14" [top]="15" [toothHeight]="50" [toothWidth]="10" [toothColor]="'	linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(30,29,90,1) 35%, rgba(129,140,248,1) 100%)'" ></app-gear>
+             <app-gear [color]="'rgb(56 189 248 / 66%)'" [reverse]="false" [size]="222" [left]="24" [delay]="1 " [toothColor]="'linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(64,20,90,1) 35%, rgba(192,132,252,1) 100%)'" [top]="24" [teethCount]="15" [toothHeight]="40" [toothWidth]="10" [radiusRatio]="0.445"  ></app-gear>
+             <app-radar></app-radar>
+            </span>
+            <span>
+            </span>
     @for (inputCode of allCode$ | async; track $index) {
 
         <span >
+
+            <div class="removecode" (click)="removeCode(inputCode)"></div>
             <app-user-upload [code]="inputCode"></app-user-upload>
             
         </span>

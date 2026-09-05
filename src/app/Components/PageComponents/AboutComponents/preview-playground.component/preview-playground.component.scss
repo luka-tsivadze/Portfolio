@@ -1,0 +1,57 @@
+@use '../preview-shared' as *;
+
+.preview-window {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.code-lines {
+  flex: 1;
+  padding: 0 4px 0 10px;
+}
+
+.code-line {
+  font-size: 7px;
+  font-family: 'Courier New', monospace;
+  color: rgba(160, 240, 208, 0.35);
+  line-height: 1.7;
+  white-space: nowrap;
+
+  &--accent { color: rgba(29, 158, 117, 0.6); }
+  &--purple { color: rgba(127, 119, 221, 0.5); }
+}
+
+.cube-wrap {
+  flex-shrink: 0;
+  padding-right: 14px;
+}
+
+.cube {
+  width: 40px;
+  height: 40px;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: spin 5s linear infinite;
+}
+
+.face {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(93, 202, 165, 0.5);
+  background: rgba(29, 158, 117, 0.04);
+
+  &--front  { transform: translateZ(20px); }
+  &--back   { transform: translateZ(-20px) rotateY(180deg); }
+  &--left   { transform: rotateY(-90deg) translateZ(20px); }
+  &--right  { transform: rotateY(90deg) translateZ(20px); }
+  &--top    { transform: rotateX(90deg) translateZ(20px); }
+  &--bottom { transform: rotateX(-90deg) translateZ(20px); }
+}
+
+@keyframes spin {
+  from { transform: rotateY(0deg) rotateX(15deg); }
+  to   { transform: rotateY(360deg) rotateX(15deg); }
+}

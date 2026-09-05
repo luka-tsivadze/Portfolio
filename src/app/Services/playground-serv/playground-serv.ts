@@ -31,4 +31,9 @@ export class PlaygroundServ {
       tap(() => this.allCode$.next([...this.allCode$.value, code]))
     );
   }
+  remove(code: UserCode) {
+    return this.http.delete(this.url).pipe(
+      tap(() => this.allCode$.next(this.allCode$.value.filter(item => item !== code)))
+    );
+  }
 }

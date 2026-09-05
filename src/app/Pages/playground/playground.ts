@@ -5,11 +5,12 @@ import { CodeUploader } from "../../Components/PageComponents/PlaygroundComponen
 import { PlaygroundServ, UserCode } from '../../Services/playground-serv/playground-serv';
 import { AsyncPipe } from '@angular/common';
 import { Gear } from "../../Components/PageComponents/PlaygroundComponents/animated Elements/gear/gear";
+import { Radar } from "../../Components/AnimatedComponents/radar/radar";
 
 
 @Component({
   selector: 'app-playground',
-  imports: [Clobe, UserUpload, CodeUploader, AsyncPipe, Gear],
+  imports: [Clobe, UserUpload, CodeUploader, AsyncPipe, Gear, Radar],
   templateUrl: './playground.html',
   styleUrl: './playground.scss',
 })
@@ -24,5 +25,15 @@ private playgroundService = inject(PlaygroundServ);
 
   uploadCode(code: UserCode) {
     this.playgroundService.upload(code).subscribe();
+  }
+  removeCode(code: UserCode){
+    const confirmation = window.prompt('Type admin project code to delete this item:');
+    if (confirmation !== 'REMOVE') return;
+    
+    const service = this.playgroundService as PlaygroundServ & {
+      remove(code: UserCode): ReturnType<PlaygroundServ['upload']>;
+    };
+
+    service.remove(code).subscribe();
   }
 }

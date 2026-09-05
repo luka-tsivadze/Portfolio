@@ -72,6 +72,24 @@ height: 450px;
   align-items: center;
   justify-content: center; 
   }
+
+  .removecode{
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  app-radar{
+    position: absolute;
+    top: 32%;
+    right: 29.5%;
+  
+  z-index: 1000;
+  }
 }
 
 

@@ -1,0 +1,82 @@
+.about-header {
+  position: relative;
+  z-index: 2;
+}
+
+.intro {
+  padding: 36px 28px 24px;
+  border-bottom: 1px solid rgba(0, 255, 160, 0.06);
+}
+
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.25em;
+  color: rgba(160, 240, 208, 0.28);
+  margin-bottom: 10px;
+}
+
+.headline {
+  font-size: 22px;
+  color: #9fe1cb;
+  font-weight: normal;
+  line-height: 1.25;
+  letter-spacing: 0.04em;
+  margin-bottom: 14px;
+
+  em {
+    color: #1d9e75;
+    font-style: normal;
+  }
+}
+
+.body-text {
+  font-size: 12px;
+  color: rgba(160, 240, 208, 0.42);
+  line-height: 1.9;
+  max-width: 580px;
+}
+
+.timeline {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid rgba(0, 255, 160, 0.06);
+}
+
+.tl-col {
+  padding: 16px 18px;
+  border-right: 1px solid rgba(0, 255, 160, 0.06);
+
+  &:last-child {
+    border-right: none;
+  }
+}
+
+.tl-year {
+  display: block;
+  font-size: 12px;
+  color: #1d9e75;
+  letter-spacing: 0.18em;
+  margin-bottom: 6px;
+}
+
+.tl-text {
+  font-size: 12px;
+  color: rgba(160, 240, 208, 0.38);
+  line-height: 1.65;
+}
+
+.tl-bar {
+  height: 2px;
+  background: rgba(0, 255, 160, 0.06);
+  margin-top: 12px;
+}
+
+.tl-fill {
+  height: 100%;
+  background: rgba(29, 158, 117, 0.4);
+  transition: width 1s ease;
+
+  &--accent {
+    background: rgba(29, 158, 117, 0.65);
+  }
+}

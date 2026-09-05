@@ -35,11 +35,11 @@ export class Clobe {
 
   private buildSphere() {
     const latBands = 3;         // horizontal layers
-    const lonBands = 8;         // cubes per ring
+    const lonBands = 6;         // cubes per ring
     let id = 0;
 
     for (let i = 0; i < latBands; i++) {
-      const lat = -60 + (120 / (latBands - 1)) * i; // -60 to +60 degrees
+      const lat = -40 + (120 / (latBands - 1)) * i; // -60 to +60 degrees
 
       for (let j = 0; j < lonBands; j++) {
         const lon = (360 / lonBands) * j;

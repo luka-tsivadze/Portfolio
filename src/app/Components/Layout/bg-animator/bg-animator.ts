@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  Input,
   OnDestroy,
   ViewChild,
 } from '@angular/core';
@@ -20,9 +21,14 @@ interface Star {
   templateUrl: './bg-animator.html',
   styleUrl: './bg-animator.scss',
 })
-export class BgAnimator {
- @ViewChild('bgCanvas', { static: true })
+export class BgAnimator implements AfterViewInit, OnDestroy {
+  @ViewChild('bgCanvas', { static: true })
   private canvasRef!: ElementRef<HTMLCanvasElement>;
+
+  // NEW — opt-in only. Default false = 100% existing fullscreen behavior, untouched.
+  // Set true to size/animate against the parent element instead of window
+  // (used for small preview cards, e.g. the About page live-preview row).
+  @Input() contained = false;
 
   private ctx!: CanvasRenderingContext2D;
   private stars: Star[] = [];
@@ -32,7 +38,6 @@ export class BgAnimator {
 
   private mouse = { x: 0, y: 0 };
 
-  // Keep handlers as class fields so we can remove them
   private handleResize = () => this.resizeCanvas();
   private handleMouseMove = (event: MouseEvent) => {
     const rect = this.canvasRef.nativeElement.getBoundingClientRect();
@@ -40,51 +45,67 @@ export class BgAnimator {
     this.mouse.y = event.clientY - rect.top;
   };
 
-starscreen(): number {
-  const area = window.innerWidth * window.innerHeight;
-
-  if (area < 600 * 800) return 20;      // small screens
-  if (area < 1200 * 800) return 30;
-  if (area < 1800 * 1000) return 55;
-  return 80;                           // big screens
-}
-
-ngAfterViewInit(): void {
-  const canvas = this.canvasRef.nativeElement;
-  const ctx = canvas.getContext('2d');
-
-  if (!ctx) {
-    console.error('2D context not supported.');
-    return;
+  // NEW — small helper, only used in contained mode
+  private get sizeSource(): { width: number; height: number } {
+    if (this.contained) {
+      const parent = this.canvasRef.nativeElement.parentElement;
+      return {
+        width: parent?.clientWidth || window.innerWidth,
+        height: parent?.clientHeight || window.innerHeight,
+      };
+    }
+    return { width: window.innerWidth, height: window.innerHeight };
   }
 
-  this.ctx = ctx;
+  starscreen(): number {
+    const area = window.innerWidth * window.innerHeight;
 
-  this.resizeCanvas();
-  this.createStars();
-
-  window.addEventListener('resize', this.handleResize);
-  window.addEventListener('mousemove', this.handleMouseMove);
-
-  // initialize mouse roughly center
-  this.mouse.x = window.innerWidth / 2;
-  this.mouse.y = window.innerHeight / 2;
-
-  this.tick();
-}
-
-ngOnDestroy(): void {
-  if (this.animationId !== null) {
-    cancelAnimationFrame(this.animationId);
+    if (area < 600 * 800) return 20; // small screens
+    if (area < 1200 * 800) return 30;
+    if (area < 1800 * 1000) return 55;
+    return 80; // big screens
   }
 
-  window.removeEventListener('resize', this.handleResize);
-  window.removeEventListener('mousemove', this.handleMouseMove);
-}
+  ngAfterViewInit(): void {
+    const canvas = this.canvasRef.nativeElement;
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) {
+      console.error('2D context not supported.');
+      return;
+    }
+
+    this.ctx = ctx;
+
+    this.resizeCanvas();
+    this.createStars();
+
+    window.addEventListener('resize', this.handleResize);
+    window.addEventListener('mousemove', this.handleMouseMove);
+
+    // initialize mouse roughly center
+    this.mouse.x = window.innerWidth / 2;
+    this.mouse.y = window.innerHeight / 2;
+
+    this.tick();
+  }
+
+  ngOnDestroy(): void {
+    if (this.animationId !== null) {
+      cancelAnimationFrame(this.animationId);
+    }
+
+    window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener('mousemove', this.handleMouseMove);
+  }
+
   private resizeCanvas(): void {
     const canvas = this.canvasRef.nativeElement;
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    // CHANGED — was window.innerWidth/innerHeight directly.
+    // Now reads from sizeSource, which falls back to window when not contained.
+    const { width, height } = this.sizeSource;
+    canvas.width = width;
+    canvas.height = height;
 
     // Rebuild stars so density feels consistent after resize
     this.stars = [];

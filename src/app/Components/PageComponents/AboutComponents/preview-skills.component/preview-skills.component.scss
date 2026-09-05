@@ -1,0 +1,86 @@
+@use '../preview-shared' as *;
+
+.orbit-system {
+  position: relative;
+  width: 90px;
+  height: 90px;
+}
+
+.orbit-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #1d9e75;
+  transform: translate(-50%, -50%);
+  opacity: 0.85;
+}
+
+// Rings
+.orbit-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 255, 160, 0.12);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+
+  &--1 {
+    width: 44px;
+    height: 44px;
+    margin: -22px 0 0 -22px;
+    animation: orbit 3s linear infinite;
+  }
+
+  &--2 {
+    width: 68px;
+    height: 68px;
+    margin: -34px 0 0 -34px;
+    animation: orbit 5s linear infinite;
+  }
+
+  &--3 {
+    width: 90px;
+    height: 90px;
+    margin: -45px 0 0 -45px;
+    animation: orbit 9s linear infinite;
+  }
+}
+
+// Planets sit at the top of each ring, counter-rotate so they stay upright
+.planet {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  border-radius: 50%;
+  transform: translateX(-50%);
+
+  &--teal {
+    width: 6px;
+    height: 6px;
+    background: #1d9e75;
+    margin-top: 1px;
+  }
+
+  &--purple {
+    width: 5px;
+    height: 5px;
+    background: #534ab7;
+    margin-top: 1.5px;
+  }
+
+  &--amber {
+    width: 4px;
+    height: 4px;
+    background: #854f0b;
+    margin-top: 2px;
+  }
+}
+
+@keyframes orbit {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}

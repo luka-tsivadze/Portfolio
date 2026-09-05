@@ -8,7 +8,7 @@ import { DomSanitizer } from '@angular/platform-browser';
   template: `
     <iframe 
       [srcdoc]="safeContent"
-       sandbox="allow-scripts allow-same-origin"
+       sandbox="allow-scripts"
       style="width: 100%; height: 400px; border: none;">
     </iframe>
   `

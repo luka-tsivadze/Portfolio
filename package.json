@@ -31,6 +31,7 @@
     "@stackblitz/sdk": "^1.11.0",
     "animate.css": "^4.1.1",
     "lottie-web": "^5.13.0",
+    "ogl": "^1.0.11",
     "rxjs": "~7.8.0",
     "sass": "^1.99.0",
     "swiper": "^10.3.1",
