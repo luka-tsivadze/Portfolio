@@ -79,9 +79,9 @@ main{
     border-radius: 50%;
   }
 }
-/* When leaving, Angular adds this class */
+
 .loader-circle-out {
-  /* circular mask shrinking to center */
+
   animation: loaderCircleOut 000ms ease-out forwards;
 }
 
@@ -107,7 +107,6 @@ main{
   }
 }
 
-/* optional: inner circles shrinking with it */
 @keyframes circleCollapse {
   from {
     transform: scale(1);

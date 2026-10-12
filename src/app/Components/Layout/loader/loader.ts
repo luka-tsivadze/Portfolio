@@ -1,11 +1,11 @@
-import { NgClass } from '@angular/common';
+
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Textanimator } from "../../AnimatedComponents/textanimator/textanimator";
 import lottie from 'lottie-web';
 
 @Component({
   selector: 'app-loader',
-  imports: [Textanimator],
+  imports: [],
   templateUrl: './loader.html',
   styleUrl: './loader.scss',
   
@@ -19,10 +19,10 @@ export class Loader {
   ngAfterViewInit(): void {
     this.lottieAnim = lottie.loadAnimation({
       container: this.lottieContainer.nativeElement,
-      renderer: 'svg',           // ensures crisp, scalable graphics
+      renderer: 'svg',        
       loop: true,
       autoplay: true,
-      path: 'libraries/lotties/loader.json'  // your animation file
+      path: 'libraries/lotties/loader.json' 
     });
   }
 

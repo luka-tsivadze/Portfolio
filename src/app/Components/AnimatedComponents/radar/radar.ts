@@ -134,6 +134,11 @@ export class Radar implements AfterViewInit, OnDestroy, OnChanges {
   private program!: Program;
   private mesh!: Mesh;
   private animationFrameId: number | null = null;
+  private intersectionObserver!: IntersectionObserver;
+  private isVisible = false;
+  private isPageVisible = true;
+  private pauseStartedAt: number | null = null;
+  private totalPausedMs = 0;
   private currentMouse = [0.5, 0.5];
   private targetMouse = [0.5, 0.5];
   private canvasEl!: HTMLCanvasElement;
@@ -141,6 +146,7 @@ export class Radar implements AfterViewInit, OnDestroy, OnChanges {
   private resizeListener = () => this.resize();
   private mouseMoveListener = (e: MouseEvent) => this.handleMouseMove(e);
   private mouseLeaveListener = () => this.handleMouseLeave();
+  private visibilityListener = () => this.handleVisibilityChange();
 
   constructor(private zone: NgZone) {}
 
@@ -188,6 +194,7 @@ export class Radar implements AfterViewInit, OnDestroy, OnChanges {
     // per-frame uniform updates have no template bindings to trigger CD for.
     this.zone.runOutsideAngular(() => {
       window.addEventListener('resize', this.resizeListener);
+      document.addEventListener('visibilitychange', this.visibilityListener);
       this.resize();
 
       if (this.enableMouseInteraction) {
@@ -195,7 +202,13 @@ export class Radar implements AfterViewInit, OnDestroy, OnChanges {
         this.canvasEl.addEventListener('mouseleave', this.mouseLeaveListener);
       }
 
-      this.animationFrameId = requestAnimationFrame(this.update);
+      this.intersectionObserver = new IntersectionObserver(([entry]) => {
+        this.isVisible = entry.isIntersecting;
+        this.updateAnimationState();
+      });
+      this.intersectionObserver.observe(this.canvasEl);
+      this.isPageVisible = !document.hidden;
+      this.updateAnimationState();
     });
   }
 
@@ -234,9 +247,9 @@ export class Radar implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy(): void {
-    if (this.animationFrameId !== null) {
-      cancelAnimationFrame(this.animationFrameId);
-    }
+    this.stopAnimation();
+    this.intersectionObserver?.disconnect();
+    document.removeEventListener('visibilitychange', this.visibilityListener);
     window.removeEventListener('resize', this.resizeListener);
     if (this.canvasEl) {
       this.canvasEl.removeEventListener('mousemove', this.mouseMoveListener);
@@ -244,6 +257,34 @@ export class Radar implements AfterViewInit, OnDestroy, OnChanges {
       this.canvasEl.parentNode?.removeChild(this.canvasEl);
     }
     this.gl?.getExtension('WEBGL_lose_context')?.loseContext();
+  }
+
+  private handleVisibilityChange(): void {
+    this.isPageVisible = !document.hidden;
+    this.updateAnimationState();
+  }
+
+  private updateAnimationState(): void {
+    if (this.isVisible && this.isPageVisible) {
+      if (this.pauseStartedAt !== null) {
+        this.totalPausedMs += performance.now() - this.pauseStartedAt;
+        this.pauseStartedAt = null;
+      }
+      if (this.animationFrameId === null) {
+        this.animationFrameId = requestAnimationFrame(this.update);
+      }
+      return;
+    }
+
+    this.stopAnimation();
+  }
+
+  private stopAnimation(): void {
+    if (this.animationFrameId !== null) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+      this.pauseStartedAt = performance.now();
+    }
   }
 
   private resize(): void {
@@ -273,7 +314,7 @@ export class Radar implements AfterViewInit, OnDestroy, OnChanges {
   // Bound as a class field (arrow fn) so `this` stays correct in rAF.
   private update = (time: number): void => {
     this.animationFrameId = requestAnimationFrame(this.update);
-    this.program.uniforms['uTime'].value = time * 0.001;
+    this.program.uniforms['uTime'].value = (time - this.totalPausedMs) * 0.001;
 
     if (this.enableMouseInteraction) {
       this.currentMouse[0] += 0.05 * (this.targetMouse[0] - this.currentMouse[0]);

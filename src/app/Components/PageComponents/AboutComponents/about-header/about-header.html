@@ -15,7 +15,8 @@
   </div>
 
   <div class="timeline">
-    <div class="tl-col" *ngFor="let entry of timeline">
+    @for (entry of timeline; track entry.year) {
+    <div class="tl-col">
       <span class="tl-year">{{ entry.year }}</span>
       <p class="tl-text">{{ entry.text }}</p>
       <div class="tl-bar">
@@ -26,6 +27,7 @@
         ></div>
       </div>
     </div>
+    }
   </div>
 
 </section>

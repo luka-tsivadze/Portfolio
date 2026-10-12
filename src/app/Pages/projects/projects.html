@@ -2,8 +2,8 @@
   @for (project of projects; track project.Title; let i = $index) {
     <div class="proyect-container fade-in-up" [style.--d]="i * 120 + 'ms'">
 
-      <div class="owl-carousel-o carousel-wrapper fade-in-left" [style.--d]="i * 150 + 'ms'"
-          >
+       <div class="owl-carousel-o carousel-wrapper fade-in-left" [style.--d]="i * 150 + 'ms'"
+         (touchstart)="onTouchStart($event, i)" (touchend)="onTouchEnd($event, i)">
            
         <div class="carousel-track"
              [style.transform]="'translateX(-' + (currentIndex[i] * 100) + '%)'"
@@ -12,7 +12,7 @@
           @for (img of project.imgs; track img) {
             <div class="carousel-slide fade-in" style="--d: 150ms">
               <div class="img-container">
-                <img [src]="img" [alt]="project.Title" />
+                <img [src]="img" [alt]="project.Title" loading="lazy" decoding="async" />
               </div>
             </div>
           }
@@ -23,7 +23,12 @@
 
         <div class="carousel-dots">
           @for (img of project.imgs; track img; let dotIndex = $index) {
-            <button class="dot" [class.active]="currentIndex[i] === dotIndex"></button>
+            <button
+              class="dot"
+              [class.active]="currentIndex[i] === dotIndex"
+              [attr.aria-label]="'Go to image ' + (dotIndex + 1) + ' for ' + project.Title"
+              [attr.aria-current]="currentIndex[i] === dotIndex ? 'true' : null"
+              (click)="goTo(i, dotIndex)"></button>
           }
         </div>
       </div>

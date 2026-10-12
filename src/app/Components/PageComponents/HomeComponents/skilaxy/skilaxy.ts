@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy } from '@angular/core';
 import { Textanimator } from '../../../AnimatedComponents/textanimator/textanimator';
 
 type MoonConfig = {
@@ -25,7 +25,15 @@ type PlanetConfig = {
   templateUrl: './skilaxy.html',
   styleUrl: './skilaxy.scss',
 })
-export class Skilaxy {
+export class Skilaxy implements AfterViewInit, OnDestroy {
+
+ private observer!: IntersectionObserver;
+ private isVisible = false;
+ private isPageVisible = true;
+ private visibilityListener = () => {
+   this.isPageVisible = !document.hidden;
+   this.syncAnimationState();
+ };
 
  planets: PlanetConfig[] = [
  
@@ -164,8 +172,29 @@ export class Skilaxy {
 ];
 
   suntitle:{name:string , icon:string}={name:"core stack & tools", icon:''}
-constructor(){
+constructor(private readonly host: ElementRef<HTMLElement>) {}
 
+ngAfterViewInit(): void {
+  this.isPageVisible = !document.hidden;
+  document.addEventListener('visibilitychange', this.visibilityListener);
+  this.observer = new IntersectionObserver(([entry]) => {
+    this.isVisible = entry.isIntersecting;
+    this.syncAnimationState();
+  });
+  this.observer.observe(this.host.nativeElement);
+  this.syncAnimationState();
+}
+
+ngOnDestroy(): void {
+  this.observer?.disconnect();
+  document.removeEventListener('visibilitychange', this.visibilityListener);
+}
+
+private syncAnimationState(): void {
+  this.host.nativeElement.classList.toggle(
+    'animations-paused',
+    !this.isVisible || !this.isPageVisible,
+  );
 }
 
 

@@ -6,7 +6,7 @@ import { CvInfo } from '../../Services/cv-info/cv-info';
 @Component({
   selector: 'app-projects',
   templateUrl: './projects.html',
-  styleUrl: './projects.scss',
+  styleUrls: ['./projects.scss', './projects-responsive.scss'],
   imports: [Textanimator],
 })
 export class Projects implements OnInit, AfterViewInit, OnDestroy {
@@ -19,6 +19,7 @@ export class Projects implements OnInit, AfterViewInit, OnDestroy {
 
   autoplayDelay = 4000;
   transitionMs = 500;
+  private readonly swipeThreshold = 40;
 
   constructor(private sanitizer: DomSanitizer , private serv:CvInfo) {}
 
@@ -55,6 +56,20 @@ export class Projects implements OnInit, AfterViewInit, OnDestroy {
 
   goTo(i: number, slideIndex: number) {
     this.currentIndex[i] = slideIndex;
+    this.restartAutoplay(i);
+  }
+
+  onTouchStart(event: TouchEvent, i: number): void {
+    this.touchStartX[i] = event.changedTouches[0]?.clientX ?? 0;
+  }
+
+  onTouchEnd(event: TouchEvent, i: number): void {
+    this.touchEndX[i] = event.changedTouches[0]?.clientX ?? 0;
+    const distance = this.touchEndX[i] - this.touchStartX[i];
+
+    if (Math.abs(distance) < this.swipeThreshold) return;
+
+    distance < 0 ? this.next(i) : this.prev(i);
     this.restartAutoplay(i);
   }
 

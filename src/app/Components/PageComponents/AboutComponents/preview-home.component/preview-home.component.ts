@@ -10,8 +10,15 @@ export class PreviewHomeComponent implements OnInit, OnDestroy {
   @ViewChild('canvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
 
   private ctx!: CanvasRenderingContext2D;
-  private animId!: number;
+  private animId: number | null = null;
   private particles: { x: number; y: number; vx: number; vy: number; r: number }[] = [];
+  private observer!: IntersectionObserver;
+  private isVisible = false;
+  private isPageVisible = true;
+  private visibilityListener = () => {
+    this.isPageVisible = !document.hidden;
+    this.syncAnimation();
+  };
 
   ngOnInit(): void {
     const canvas = this.canvasRef.nativeElement;
@@ -28,6 +35,14 @@ export class PreviewHomeComponent implements OnInit, OnDestroy {
         r: Math.random() * 1.5 + 0.5,
       });
     }
+
+    this.isPageVisible = !document.hidden;
+    document.addEventListener('visibilitychange', this.visibilityListener);
+    this.observer = new IntersectionObserver(([entry]) => {
+      this.isVisible = entry.isIntersecting;
+      this.syncAnimation();
+    });
+    this.observer.observe(canvas);
 
     this.draw();
   }
@@ -72,10 +87,31 @@ export class PreviewHomeComponent implements OnInit, OnDestroy {
       ctx.fill();
     });
 
-    this.animId = requestAnimationFrame(() => this.draw());
+    this.syncAnimation();
+  }
+
+  private syncAnimation(): void {
+    if (this.isVisible && this.isPageVisible) {
+      if (this.animId === null) {
+        this.animId = requestAnimationFrame(() => {
+          this.animId = null;
+          this.draw();
+        });
+      }
+      return;
+    }
+
+    if (this.animId !== null) {
+      cancelAnimationFrame(this.animId);
+      this.animId = null;
+    }
   }
 
   ngOnDestroy(): void {
-    cancelAnimationFrame(this.animId);
+    if (this.animId !== null) {
+      cancelAnimationFrame(this.animId);
+    }
+    this.observer?.disconnect();
+    document.removeEventListener('visibilitychange', this.visibilityListener);
   }
 }

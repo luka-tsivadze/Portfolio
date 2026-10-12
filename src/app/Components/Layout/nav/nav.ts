@@ -12,8 +12,18 @@ import { RouterLink } from "@angular/router";
   imports: [RouterLink]
 })
 export class Nav {
-  parcent:number=0;
+  scrollProgress = 0;
+  isScrolled = false;
+  menuOpen = false;
   constructor() {}
+
+toggleMenu(): void {
+  this.menuOpen = !this.menuOpen;
+}
+
+closeMenu(): void {
+  this.menuOpen = false;
+}
 
 onWindowScroll(): void {
   const scrollTop =
@@ -23,12 +33,9 @@ onWindowScroll(): void {
     (document.documentElement.scrollHeight || document.body.scrollHeight) -
     window.innerHeight;
 
-  const next =
+  this.isScrolled = scrollTop > 12;
+  this.scrollProgress =
     max > 0 ? (scrollTop / max) * 100 : 0;
-
-  if (next === this.parcent) return; // avoid pointless change
-
-  this.parcent = next;
 }
 
 }

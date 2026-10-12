@@ -12,7 +12,7 @@ import { Radar } from "../../Components/AnimatedComponents/radar/radar";
   selector: 'app-playground',
   imports: [Clobe, UserUpload, CodeUploader, AsyncPipe, Gear, Radar],
   templateUrl: './playground.html',
-  styleUrl: './playground.scss',
+  styleUrls: ['./playground.scss', './playground-responsive.scss'],
 })
 export class Playground implements OnInit {
 private playgroundService = inject(PlaygroundServ);

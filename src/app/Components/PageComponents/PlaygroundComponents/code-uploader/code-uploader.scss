@@ -1,10 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600&display=swap');
+@use './code-uploader.tokens' as *;
 
-$teal: #20b2aa;
-$teal-bright: #5ee8da;
-$teal-light: #c8f0ec;
-$bg-card: rgba(10, 28, 38, 0.97);
-$bg-deep: rgba(6, 18, 28, 0.99);
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600&display=swap');
 
 :host {
   display: block;

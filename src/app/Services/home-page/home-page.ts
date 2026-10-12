@@ -1,7 +1,23 @@
 import { Injectable, inject } from '@angular/core';
 import { CvInfo } from '../cv-info/cv-info';
 import { HttpClient } from '@angular/common/http';
-import { concatMap, filter, map } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
+
+interface VisitorInfo {
+  timestamp: string;
+  userAgent: string;
+  platform: string;
+  language: string;
+  timezone: string;
+  screen: string;
+  referrer: string;
+  ip: string;
+  city: string;
+  country: string;
+}
+
+const VISITORS_URL =
+  'https://portfolio-2fe89-default-rtdb.europe-west1.firebasedatabase.app/visitors';
 
 interface headerDataType {
   codeWindows: {
@@ -74,54 +90,60 @@ heroinformation:this.serv.heroinformation
 
 
   async getVisitorInfo() {
-  const info = {
-    timestamp: new Date().toISOString(),
-    userAgent: navigator.userAgent,
-    platform: navigator.platform,
-    language: navigator.language,
-    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    screen: `${screen.width}x${screen.height}`,
-    referrer: document.referrer || 'direct',
-    ip: '',
-    city: '',
-    country: ''
-  };
- 
-  try {
-    const res = await fetch('https://ipapi.co/json/');
-    const geo = await res.json();
-    info.ip = geo.ip;
-    info.city = geo.city;
-    info.country = geo.country_name;
-  } catch {
-    // service down or blocked — don't fail the whole thing over it
+    const info: VisitorInfo = {
+      timestamp: new Date().toISOString(),
+      userAgent: navigator.userAgent,
+      platform: navigator.platform,
+      language: navigator.language,
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      screen: `${screen.width}x${screen.height}`,
+      referrer: document.referrer || 'direct',
+      ip: '',
+      city: '',
+      country: '',
+    };
+
+    try {
+      const response = await fetch('https://ipapi.co/json/');
+      if (!response.ok) return;
+
+      const geo = await response.json();
+      info.ip = typeof geo.ip === 'string' ? geo.ip.trim() : '';
+      info.city = typeof geo.city === 'string' ? geo.city.trim() : '';
+      info.country = typeof geo.country_name === 'string' ? geo.country_name.trim() : '';
+    } catch {
+      return;
+    }
+
+    if (!info.ip) return;
+
+    try {
+      const key = await this.createVisitorKey(info);
+      const visitorUrl = `${VISITORS_URL}/${key}.json`;
+      const existing = await firstValueFrom(this.http.get<VisitorInfo | null>(visitorUrl));
+
+      if (existing !== null) return;
+
+      await firstValueFrom(this.http.put(visitorUrl, info));
+    } catch {
+      // Visitor logging must not block or disrupt the portfolio.
+    }
   }
 
+  private async createVisitorKey(info: VisitorInfo): Promise<string> {
+    const identity = JSON.stringify([
+      info.ip.toLowerCase(),
+      info.city.toLowerCase(),
+      info.country.toLowerCase(),
+      info.userAgent,
+      info.platform,
+      info.screen,
+    ]);
+    const digest = await globalThis.crypto.subtle.digest(
+      'SHA-256',
+      new TextEncoder().encode(identity),
+    );
 
-  this.http.get<any>(
-  'https://portfolio-2fe89-default-rtdb.europe-west1.firebasedatabase.app/visitors.json'
-).subscribe((visitors) => {
-  // console.log('Retrieved visitors:', visitors);
-
-  const visitorList = visitors ? Object.values(visitors) : [];
-  const shouldPost = !visitorList.some((v: any) => this.isSameVisitor(v, info));
-
-  if (shouldPost) {
-    this.http.post(
-      'https://portfolio-2fe89-default-rtdb.europe-west1.firebasedatabase.app/visitors.json',
-      info
-    ).subscribe();
+    return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('');
   }
-});
-
-  }
-
-  private isSameVisitor(stored: any, incoming: any): boolean {
-  const fieldsToCompare: (keyof typeof incoming)[] = [
-    'ip', 'city', 'country', 'language', 'platform',
-    'referrer', 'screen', 'timezone', 'userAgent'
-  ];
-
-  return fieldsToCompare.every(key => stored[key] === incoming[key]);
-}
 }

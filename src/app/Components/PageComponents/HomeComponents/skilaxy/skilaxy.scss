@@ -1,3 +1,8 @@
+ :host(.animations-paused) .orbit,
+ :host(.animations-paused) .orbit * {
+  animation-play-state: paused !important;
+}
+
 .skills {
   width: 100%;
  

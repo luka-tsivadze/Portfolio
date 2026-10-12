@@ -1,23 +1,23 @@
-<nav class="navbar">
+<nav class="navbar" [class.is-scrolled]="isScrolled">
   <ul class="nav-inner">
 
     <a class="nav-logo" routerLink="/">
       <span class="logo-box">LT</span>
     </a>
 
-    <nav class="nav-links">
-      <a routerLink="/" class="nav-link">Home</a>
-      <a routerLink="/Projects" class="nav-link">Projects</a>
-      <a routerLink="/playground" class="nav-link">Playground</a>
-      <a routerLink="/about" class="nav-link">About website</a>
-      <a href="assets/cv.pdf" download class="nav-link nav-cv">Get CV</a>
+    <nav id="primary-navigation" class="nav-links" [class.is-open]="menuOpen" aria-label="Main navigation">
+      <a routerLink="/" class="nav-link" (click)="closeMenu()">Home</a>
+      <a routerLink="/Projects" class="nav-link" (click)="closeMenu()">Projects</a>
+      <a routerLink="/playground" class="nav-link" (click)="closeMenu()">Playground</a>
+      <a routerLink="/about" class="nav-link" (click)="closeMenu()">About website</a>
+      <a href="assets/cv.pdf" download class="nav-link nav-cv" (click)="closeMenu()">Get CV</a>
     </nav>
 
-    <button class="nav-toggle" aria-label="Menu">
+    <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-controls="primary-navigation" [attr.aria-expanded]="menuOpen" (click)="toggleMenu()">
       <span></span><span></span><span></span>
     </button>
 
 </ul>
-<div class="scroll-progress" [style.width.%]="100-parcent"></div>
+<div class="scroll-progress" aria-hidden="true" [style.transform]="'scaleX(' + (scrollProgress / 100) + ')'" ></div>
 
 </nav>

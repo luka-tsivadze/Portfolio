@@ -5,17 +5,41 @@
 @use 'app/scss/responsive.scss' as *;
 @use 'app/scss/animations.scss' as *;
 
-body{
+:root {
+  --font-body: 'Aptos', 'Segoe UI', sans-serif;
+  --font-display: 'Baskerville', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+}
+
+body {
     background-color: var(--bg-alt);
     color: var(--text);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--font-body);
+  line-height: 1.5;
+}
 
-  }
-  *{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: firago;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.12;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
 }
 /* width */
 ::-webkit-scrollbar {

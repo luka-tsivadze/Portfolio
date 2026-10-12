@@ -8,7 +8,7 @@ import { CompileService } from '../../../../Services/compile-service/compile-ser
   selector: 'app-code-uploader',
   imports: [NgClass, FormsModule],
   templateUrl: './code-uploader.html',
-  styleUrl: './code-uploader.scss',
+  styleUrls: ['./code-uploader.scss', './code-uploader-responsive.scss'],
 })
 export class CodeUploader {
   @Output() codeUploaded = new EventEmitter<UserCode>();

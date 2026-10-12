@@ -4,6 +4,7 @@ import {
   Component,
   ElementRef,
   Input,
+  NgZone,
   OnDestroy,
   ViewChild,
 } from '@angular/core';
@@ -15,55 +16,78 @@ interface Star {
   vx: number;
   vy: number;
 }
+
 @Component({
   selector: 'app-bg-animator',
   imports: [],
   templateUrl: './bg-animator.html',
   styleUrl: './bg-animator.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgAnimator implements AfterViewInit, OnDestroy {
   @ViewChild('bgCanvas', { static: true })
   private canvasRef!: ElementRef<HTMLCanvasElement>;
 
-  // NEW — opt-in only. Default false = 100% existing fullscreen behavior, untouched.
-  // Set true to size/animate against the parent element instead of window
-  // (used for small preview cards, e.g. the About page live-preview row).
   @Input() contained = false;
 
   private ctx!: CanvasRenderingContext2D;
   private stars: Star[] = [];
-  private readonly fps = 120;
-  private readonly starCount = this.starscreen();
+
+  private readonly targetFps = 60;
+  private readonly frameInterval = 1000 / this.targetFps;
+
+  private readonly starDistanceSq = 100 * 100;
+  private readonly mouseDistanceSq = 110 * 110;
+
   private animationId: number | null = null;
+  private lastFrameTime = 0;
+  private visibilityListener = () => this.handleVisibilityChange();
 
   private mouse = { x: 0, y: 0 };
 
-  private handleResize = () => this.resizeCanvas();
-  private handleMouseMove = (event: MouseEvent) => {
-    const rect = this.canvasRef.nativeElement.getBoundingClientRect();
-    this.mouse.x = event.clientX - rect.left;
-    this.mouse.y = event.clientY - rect.top;
+  private canvasLeft = 0;
+  private canvasTop = 0;
+
+  constructor(private readonly zone: NgZone) {}
+
+  private handleResize = () => {
+    this.resizeCanvas();
+    this.updateCanvasPosition();
   };
 
-  // NEW — small helper, only used in contained mode
-  private get sizeSource(): { width: number; height: number } {
+  private handleMouseMove = (event: MouseEvent) => {
+    this.mouse.x = event.clientX - this.canvasLeft;
+    this.mouse.y = event.clientY - this.canvasTop;
+  };
+
+  private get sizeSource(): {
+    width: number;
+    height: number;
+  } {
     if (this.contained) {
       const parent = this.canvasRef.nativeElement.parentElement;
+
       return {
         width: parent?.clientWidth || window.innerWidth,
         height: parent?.clientHeight || window.innerHeight,
       };
     }
-    return { width: window.innerWidth, height: window.innerHeight };
+
+    return {
+      width: window.innerWidth,
+      height: window.innerHeight,
+    };
   }
 
-  starscreen(): number {
-    const area = window.innerWidth * window.innerHeight;
+  private starscreen(): number {
+    const { width, height } = this.sizeSource;
+    const area = width * height;
 
-    if (area < 600 * 800) return 20; // small screens
-    if (area < 1200 * 800) return 30;
-    if (area < 1800 * 1000) return 55;
-    return 80; // big screens
+    if (area < 600 * 800) return 40;
+    if (area < 1200 * 800) return 60;
+    if (area < 1800 * 1000) return 95;
+
+    return 120;
   }
 
   ngAfterViewInit(): void {
@@ -78,16 +102,25 @@ export class BgAnimator implements AfterViewInit, OnDestroy {
     this.ctx = ctx;
 
     this.resizeCanvas();
-    this.createStars();
+    this.updateCanvasPosition();
 
-    window.addEventListener('resize', this.handleResize);
-    window.addEventListener('mousemove', this.handleMouseMove);
+    this.mouse.x = canvas.width / 2;
+    this.mouse.y = canvas.height / 2;
 
-    // initialize mouse roughly center
-    this.mouse.x = window.innerWidth / 2;
-    this.mouse.y = window.innerHeight / 2;
+    this.zone.runOutsideAngular(() => {
+      window.addEventListener('resize', this.handleResize, {
+        passive: true,
+      });
 
-    this.tick();
+      window.addEventListener('mousemove', this.handleMouseMove, {
+        passive: true,
+      });
+      document.addEventListener('visibilitychange', this.visibilityListener);
+
+      if (!document.hidden) {
+        this.animationId = requestAnimationFrame(this.tick);
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -97,109 +130,192 @@ export class BgAnimator implements AfterViewInit, OnDestroy {
 
     window.removeEventListener('resize', this.handleResize);
     window.removeEventListener('mousemove', this.handleMouseMove);
+    document.removeEventListener('visibilitychange', this.visibilityListener);
+  }
+
+  private handleVisibilityChange(): void {
+    if (document.hidden) {
+      if (this.animationId !== null) {
+        cancelAnimationFrame(this.animationId);
+        this.animationId = null;
+      }
+      return;
+    }
+
+    if (this.animationId === null) {
+      this.lastFrameTime = performance.now();
+      this.animationId = requestAnimationFrame(this.tick);
+    }
+  }
+
+  private updateCanvasPosition(): void {
+    const rect =
+      this.canvasRef.nativeElement.getBoundingClientRect();
+
+    this.canvasLeft = rect.left;
+    this.canvasTop = rect.top;
   }
 
   private resizeCanvas(): void {
     const canvas = this.canvasRef.nativeElement;
-    // CHANGED — was window.innerWidth/innerHeight directly.
-    // Now reads from sizeSource, which falls back to window when not contained.
     const { width, height } = this.sizeSource;
+
     canvas.width = width;
     canvas.height = height;
 
-    // Rebuild stars so density feels consistent after resize
-    this.stars = [];
     this.createStars();
   }
 
   private createStars(): void {
     const canvas = this.canvasRef.nativeElement;
+    const starCount = this.starscreen();
 
-    for (let i = 0; i < this.starCount; i++) {
+    this.stars.length = 0;
+
+    for (let i = 0; i < starCount; i++) {
       this.stars.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         radius: Math.random() * 1 + 1,
-        vx: Math.floor(Math.random() * 50) - 25,
-        vy: Math.floor(Math.random() * 50) - 25,
+
+        // pixels per second
+        vx: Math.random() * 50 - 25,
+        vy: Math.random() * 50 - 25,
       });
     }
-  }
-
-  private distance(p1: { x: number; y: number }, p2: { x: number; y: number }): number {
-    const dx = p2.x - p1.x;
-    const dy = p2.y - p1.y;
-    return Math.sqrt(dx * dx + dy * dy);
   }
 
   private draw(): void {
     const canvas = this.canvasRef.nativeElement;
     const ctx = this.ctx;
+    const stars = this.stars;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
     ctx.globalCompositeOperation = 'lighter';
 
-    // Draw stars
-    for (let i = 0; i < this.stars.length; i++) {
-      const s = this.stars[i];
+    // stars
+    ctx.fillStyle = '#3af2ff';
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
 
-      // neon-ish star color (blue with slight green)
-      ctx.fillStyle = '#3af2ff';
+    for (let i = 0; i < stars.length; i++) {
+      const star = stars[i];
+
       ctx.beginPath();
-      ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+      ctx.arc(
+        star.x,
+        star.y,
+        star.radius,
+        0,
+        Math.PI * 2
+      );
       ctx.fill();
-
-      // subtle inner stroke
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
       ctx.stroke();
     }
 
-    // Draw connections
+    // connections
     ctx.beginPath();
-    for (let i = 0; i < this.stars.length; i++) {
-      const starI = this.stars[i];
 
-      // Connect to mouse
-      if (this.distance(this.mouse, starI) < 110) {
+    for (let i = 0; i < stars.length; i++) {
+      const starI = stars[i];
+
+      // mouse connection
+      const mouseDx = this.mouse.x - starI.x;
+      const mouseDy = this.mouse.y - starI.y;
+
+      if (
+        mouseDx * mouseDx +
+          mouseDy * mouseDy <
+        this.mouseDistanceSq
+      ) {
         ctx.moveTo(starI.x, starI.y);
-        ctx.lineTo(this.mouse.x, this.mouse.y);
+        ctx.lineTo(
+          this.mouse.x,
+          this.mouse.y
+        );
       }
 
-      // Connect to neighboring stars
-      for (let j = i + 1; j < this.stars.length; j++) {
-        const starII = this.stars[j];
-        const dist = this.distance(starI, starII);
+      // star connections
+      for (
+        let j = i + 1;
+        j < stars.length;
+        j++
+      ) {
+        const starII = stars[j];
 
-        if (dist < 100) {
+        const dx = starII.x - starI.x;
+        const dy = starII.y - starI.y;
+
+        if (
+          dx * dx + dy * dy <
+          this.starDistanceSq
+        ) {
           ctx.moveTo(starI.x, starI.y);
-          ctx.lineTo(starII.x, starII.y);
+          ctx.lineTo(
+            starII.x,
+            starII.y
+          );
         }
       }
     }
 
     ctx.lineWidth = 0.4;
-
-    ctx.strokeStyle = 'rgba(114, 255, 180, 0.45)';
+    ctx.strokeStyle =
+      'rgba(114, 255, 180, 0.45)';
     ctx.stroke();
   }
 
-  private update(): void {
+  private update(deltaSeconds: number): void {
     const canvas = this.canvasRef.nativeElement;
 
     for (let i = 0; i < this.stars.length; i++) {
-      const s = this.stars[i];
+      const star = this.stars[i];
 
-      s.x += s.vx / this.fps;
-      s.y += s.vy / this.fps;
+      star.x += star.vx * deltaSeconds;
+      star.y += star.vy * deltaSeconds;
 
-      if (s.x < 0 || s.x > canvas.width) s.vx = -s.vx;
-      if (s.y < 0 || s.y > canvas.height) s.vy = -s.vy;
+      if (
+        star.x < 0 ||
+        star.x > canvas.width
+      ) {
+        star.vx = -star.vx;
+      }
+
+      if (
+        star.y < 0 ||
+        star.y > canvas.height
+      ) {
+        star.vy = -star.vy;
+      }
     }
   }
 
-  private tick(): void {
+  private tick = (timestamp: number): void => {
+    this.animationId =
+      requestAnimationFrame(this.tick);
+
+    const elapsed =
+      timestamp - this.lastFrameTime;
+
+    if (elapsed < this.frameInterval) {
+      return;
+    }
+
+    this.lastFrameTime =
+      timestamp -
+      (elapsed % this.frameInterval);
+
+    const deltaSeconds = Math.min(
+      elapsed / 1000,
+      0.05
+    );
+
+    this.update(deltaSeconds);
     this.draw();
-    this.update();
-    this.animationId = requestAnimationFrame(() => this.tick());
-  }
+  };
 }

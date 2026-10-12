@@ -1,0 +1,129 @@
+@use './code-uploader.tokens' as *;
+
+@media (max-width: 600px) {
+  .uploader {
+    min-height: 0;
+    padding: 1rem 0.5rem;
+  }
+
+  .card {
+    min-width: 0;
+    border-radius: 10px;
+  }
+
+  .card-header {
+    align-items: flex-start;
+    gap: 10px;
+    padding: 1rem 1rem 0.85rem;
+  }
+
+  .header-icon {
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+  }
+
+  .header-text {
+    min-width: 0;
+
+    h2 {
+      font-size: 16px;
+    }
+
+    p {
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    padding: 0.85rem 1rem;
+    border-top: 1px solid rgba($teal, 0.12);
+    background: rgba(0, 0, 0, 0.12);
+  }
+
+  .tab-btn {
+    min-width: 0;
+    min-height: 40px;
+    padding: 8px 10px;
+    font-size: 11px;
+    white-space: normal;
+    border: 1px solid rgba($teal, 0.16);
+    border-radius: 5px;
+    text-align: left;
+
+    &.active {
+      border-color: rgba($teal-bright, 0.55);
+      background: rgba($teal, 0.12);
+    }
+  }
+
+  .tabs > .Angular {
+    grid-column: 1 / -1;
+    margin-left: 0;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .editors {
+    min-width: 0;
+    padding: 0.75rem 1rem 1rem;
+  }
+
+  .editor-wrap,
+  textarea.code-input {
+    min-width: 0;
+  }
+
+  textarea.code-input {
+    padding-left: 44px;
+    font-size: 12px;
+  }
+
+  .line-nums {
+    width: 32px;
+    padding-right: 6px;
+  }
+
+  .validation-banner {
+    align-items: flex-start;
+    margin: 0 1rem 0.75rem;
+    padding: 8px 10px;
+  }
+
+  .validation-banner > span:nth-child(2) {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .form-footer {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 0.9rem 1rem 1rem;
+  }
+
+  .form-footer .btn-group {
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-left: auto;
+  }
+
+  .btn-clear,
+  .btn-submit {
+    min-height: 42px;
+    padding: 8px 12px;
+  }
+
+  .status-bar {
+    align-items: flex-start;
+    padding: 0.6rem 1rem;
+  }
+
+  .status-text {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+}

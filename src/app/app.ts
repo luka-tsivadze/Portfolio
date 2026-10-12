@@ -24,34 +24,45 @@ storedInnerWidth = window.innerWidth;
 storedOuterHeight = window.outerHeight;
 storedInnerHeight = window.innerHeight;
 constructor() {
-      window.document.body.style.overflow = 'hidden';
-setInterval(() => {
-  const widthDiff = window.outerWidth + window.innerWidth;
-  const heightDiff = window.outerHeight + window.innerHeight;
-if (
-  window.outerWidth !== this.storedOuterWidth ||
-  window.innerWidth !== this.storedInnerWidth ||
-  window.outerHeight !== this.storedOuterHeight ||
-  window.innerHeight !== this.storedInnerHeight
-) {
-  console.log('inspect was open');
-  // alert('Inspect was open. Please close it to continue using the application.');
-  // debugger;
 
-}
-}, 1000);
-    setTimeout(() => {
-      this.loading = false;
-    }, 2000);
-    setTimeout(() => {
-            window.document.body.style.overflow = 'auto';
-      this.loaderDone = false;
-    }, 3650);
-    this.homeService.getVisitorInfo().then((resp) => {
-      // console.log('Visitor info retrieved:', resp);
-
-    })
   }
 
+  private delay(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async ngOnInit(): Promise<void> {
+  document.body.style.overflow = 'hidden';
+
+  try {
+    await Promise.all([
+      this.waitForWindowLoad(),
+
+   
+      this.delay(1500),
+    ]);
+  } catch (error) {
+    console.error(error);
+  }
+
+  this.loading = false;
+  this.loaderDone = false;
+  document.body.style.overflow = 'auto';
+
+  this.homeService.getVisitorInfo();
+}
+private waitForWindowLoad(): Promise<void> {
+  if (document.readyState === 'complete') {
+    return Promise.resolve();
+  }
+
+  return new Promise(resolve => {
+    window.addEventListener(
+      'load',
+      () => resolve(),
+      { once: true }
+    );
+  });
+}
   
 }

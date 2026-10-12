@@ -1,5 +1,7 @@
 // responsive.scss
 
+@use 'sass:map';
+
 $typography: (
     h1: 2.5rem,
     h2: 2rem,
@@ -25,8 +27,8 @@ $responsive-breakpoints: (
 
 // responsive adjustments (progressively smaller)
 @each $bp-name, $bp-map in $responsive-breakpoints {
-    $max: map-get($bp-map, max);
-    $scale: map-get($bp-map, scale);
+    $max: map.get($bp-map, max);
+    $scale: map.get($bp-map, scale);
 
     @media screen and (max-width: $max) {
         @each $sel, $size in $typography {
